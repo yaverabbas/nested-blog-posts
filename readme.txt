@@ -1,9 +1,9 @@
 === Nested Blog Posts ===
 Contributors: wwhry
 Donate link: https://github.com/yaverabbas
-Tags: nested posts, hierarchical posts, parent child posts, hierarchical permalinks, nested permalinks, post hierarchy, seo-friendly urls
+Tags: nested posts, hierarchical posts, parent child posts, SEO friendly URLs, nested permalinks
 Requires at least: 6.3
-Tested up to: 6.9.1
+Tested up to: 6.9
 Stable tag: 1.0.0
 Requires PHP: 7.4
 License: GPLv2 or later

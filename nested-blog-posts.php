@@ -5,7 +5,7 @@
  * Description:       Enables parent/child hierarchy for standard Posts and generates hierarchical permalinks like /parent/child/ (supports unlimited depth).
  * Version:           1.0.0
  * Requires at least: 6.3
- * Tested up to:      6.9.1
+ * Tested up to:      6.9
  * Requires PHP:      7.4
  * Author:            Yaver Abbas
  * Author URI:        https://github.com/yaverabbas

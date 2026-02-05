@@ -36,9 +36,6 @@ final class NBP_Plugin {
 		// Ensure REST API exposes parent field for Block Editor.
 		add_filter( 'rest_prepare_post', array( __CLASS__, 'ensure_parent_in_rest' ), 10, 3 );
 
-		// i18n
-		add_action( 'init', array( __CLASS__, 'load_textdomain' ) );
-
 		// Admin UI
 		if ( is_admin() ) {
 			NBP_Admin::init();
@@ -79,15 +76,6 @@ final class NBP_Plugin {
 		// Do NOT delete user settings on deactivation.
 		// Ensure rewrites are flushed to revert to default behavior.
 		update_option( self::OPTION_NEEDS_FLUSH, 1, false );
-	}
-
-	/**
-	 * Load plugin translations.
-	 *
-	 * @since 1.0.0
-	 */
-	public static function load_textdomain() {
-		load_plugin_textdomain( 'nested-blog-posts', false, dirname( plugin_basename( NBP_FILE ) ) . '/languages' );
 	}
 
 	/**
