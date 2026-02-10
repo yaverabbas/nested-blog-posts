@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-final class NBP_Admin {
+final class WWHRY_NBP_Admin {
 
 	/**
 	 * Init admin hooks.
@@ -18,6 +18,23 @@ final class NBP_Admin {
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_settings_styles' ) );
+	}
+
+	/**
+	 * Enqueue styles only on the plugin settings page (no raw <style> tags).
+	 *
+	 * @since 1.0.0
+	 * @param string $hook_suffix Current admin page hook.
+	 */
+	public static function enqueue_settings_styles( $hook_suffix ) {
+		if ( $hook_suffix !== 'settings_page_nested-blog-posts' ) {
+			return;
+		}
+		$handle = 'wwhry-nbp-admin-settings';
+		wp_register_style( $handle, false, array(), WWHRY_NBP_VERSION );
+		wp_enqueue_style( $handle );
+		wp_add_inline_style( $handle, '.wwhry-nbp-tips-list{list-style:disc;padding-left:20px;}' );
 	}
 
 	/**
@@ -42,8 +59,8 @@ final class NBP_Admin {
 	 */
 	public static function register_settings() {
 		register_setting(
-			'nbp_settings',
-			NBP_Plugin::OPTION_ENABLED,
+			'wwhry_nbp_settings',
+			WWHRY_NBP_Plugin::OPTION_ENABLED,
 			array(
 				'type'              => 'integer',
 				'sanitize_callback' => array( __CLASS__, 'sanitize_enabled' ),
@@ -52,18 +69,18 @@ final class NBP_Admin {
 		);
 
 		add_settings_section(
-			'nbp_main',
+			'wwhry_nbp_main',
 			__( 'Settings', 'nested-blog-posts' ),
 			array( __CLASS__, 'render_section_intro' ),
 			'nested-blog-posts'
 		);
 
 		add_settings_field(
-			'nbp_enabled',
+			'wwhry_nbp_enabled',
 			__( 'Enable hierarchical posts for blog posts', 'nested-blog-posts' ),
 			array( __CLASS__, 'render_enabled_field' ),
 			'nested-blog-posts',
-			'nbp_main'
+			'wwhry_nbp_main'
 		);
 	}
 
@@ -76,10 +93,10 @@ final class NBP_Admin {
 	 */
 	public static function sanitize_enabled( $value ) {
 		$new = empty( $value ) ? 0 : 1;
-		$old = (int) get_option( NBP_Plugin::OPTION_ENABLED, 1 );
+		$old = (int) get_option( WWHRY_NBP_Plugin::OPTION_ENABLED, 1 );
 
 		if ( $new !== $old ) {
-			update_option( NBP_Plugin::OPTION_NEEDS_FLUSH, 1, false );
+			update_option( WWHRY_NBP_Plugin::OPTION_NEEDS_FLUSH, 1, false );
 		}
 
 		return $new;
@@ -100,10 +117,10 @@ final class NBP_Admin {
 	 * @since 1.0.0
 	 */
 	public static function render_enabled_field() {
-		$enabled = (int) get_option( NBP_Plugin::OPTION_ENABLED, 1 );
+		$enabled = (int) get_option( WWHRY_NBP_Plugin::OPTION_ENABLED, 1 );
 		?>
 		<label>
-			<input type="checkbox" name="<?php echo esc_attr( NBP_Plugin::OPTION_ENABLED ); ?>" value="1" <?php checked( 1, $enabled ); ?> />
+			<input type="checkbox" name="<?php echo esc_attr( WWHRY_NBP_Plugin::OPTION_ENABLED ); ?>" value="1" <?php checked( 1, $enabled ); ?> />
 			<?php echo esc_html__( 'Enabled', 'nested-blog-posts' ); ?>
 		</label>
 		<p class="description">
@@ -123,12 +140,11 @@ final class NBP_Admin {
 		}
 		?>
 		<div class="wrap">
-			<style>.nbp-tips-list{list-style:disc;padding-left:20px;}</style>
 			<h1><?php echo esc_html__( 'Nested Blog Posts', 'nested-blog-posts' ); ?></h1>
 
 			<form action="options.php" method="post">
 				<?php
-				settings_fields( 'nbp_settings' );
+				settings_fields( 'wwhry_nbp_settings' );
 				do_settings_sections( 'nested-blog-posts' );
 				submit_button();
 				?>
@@ -147,7 +163,7 @@ final class NBP_Admin {
 			</ol>
 
 			<h3><?php echo esc_html__( 'Newbie tips', 'nested-blog-posts' ); ?></h3>
-			<ul class="nbp-tips-list">
+			<ul class="wwhry-nbp-tips-list">
 				<li><?php echo esc_html__( 'If you do not see the Parent dropdown, refresh the editor and make sure the feature is Enabled.', 'nested-blog-posts' ); ?></li>
 				<li><?php echo esc_html__( 'Avoid using the same slugs as Pages (e.g., /about/) to prevent URL conflicts.', 'nested-blog-posts' ); ?></li>
 				<li><?php echo esc_html__( 'If you change the Parent of a post, its URL will change too. Consider redirects for SEO.', 'nested-blog-posts' ); ?></li>

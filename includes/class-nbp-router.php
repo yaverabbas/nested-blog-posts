@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-final class NBP_Router {
+final class WWHRY_NBP_Router {
 
 	/**
 	 * Maximum depth for parent chain (safety limit).
@@ -27,7 +27,7 @@ final class NBP_Router {
 	/**
 	 * Debug query string key.
 	 */
-	const DEBUG_QS = 'nbp_debug';
+	const DEBUG_QS = 'wwhry_nbp_debug';
 
 	/**
 	 * Debug log for current request.
@@ -42,7 +42,7 @@ final class NBP_Router {
 	 * @since 1.0.0
 	 */
 	public static function init() {
-		// Post type configuration is now handled by NBP_Plugin::configure_post_type().
+		// Post type configuration is now handled by WWHRY_NBP_Plugin::configure_post_type().
 		// This ensures it runs early enough for Block Editor compatibility.
 
 		add_filter( 'post_link', array( __CLASS__, 'filter_post_link' ), 10, 2 );
@@ -53,7 +53,7 @@ final class NBP_Router {
 		// Stop WP canonical redirects when we matched a valid nested URL.
 		add_filter( 'redirect_canonical', array( __CLASS__, 'stop_canonical_redirect' ), 10, 2 );
 
-		// Optional debug headers for admins (?nbp_debug=1).
+		// Optional debug headers for admins (?wwhry_nbp_debug=1).
 		add_action( 'send_headers', array( __CLASS__, 'send_debug_headers' ) );
 
 		self::dbg( 'init:hierarchical-posts-enabled' );
@@ -142,7 +142,7 @@ final class NBP_Router {
 		// Avoid intercepting obvious system routes (also keep this filterable).
 		$first_segment = strtok( $path, '/' );
 		$reserved = apply_filters(
-			'nbp_reserved_prefixes',
+			'wwhry_nbp_reserved_prefixes',
 			array( 'wp-admin', 'wp-json', 'feed', 'sitemap', 'robots.txt', 'category', 'tag', 'author', 'search' )
 		);
 
@@ -227,7 +227,7 @@ final class NBP_Router {
 					$wp->query_vars['error']
 				);
 
-				$wp->matched_rule  = 'nbp_hier_posts_router';
+				$wp->matched_rule  = 'wwhry_nbp_hier_posts_router';
 				$wp->matched_query = 'post_type=post&p=' . self::$matched_post_id;
 
 				return;
@@ -260,7 +260,7 @@ final class NBP_Router {
 	}
 
 	/**
-	 * Debug enabled only for admins: ?nbp_debug=1
+	 * Debug enabled only for admins: ?wwhry_nbp_debug=1
 	 *
 	 * @since 1.0.0
 	 * @return bool
@@ -298,18 +298,18 @@ final class NBP_Router {
 			return;
 		}
 
-		header( 'X-NBP-Matched-Post: ' . ( self::$matched_post_id ? self::$matched_post_id : 0 ) );
+		header( 'X-WWHRY-NBP-Matched-Post: ' . ( self::$matched_post_id ? self::$matched_post_id : 0 ) );
 
 		$last = end( self::$debug );
 		if ( $last ) {
-			header( 'X-NBP-Last-Step: ' . $last['step'] );
+			header( 'X-WWHRY-NBP-Last-Step: ' . $last['step'] );
 			$json = wp_json_encode( $last['data'] );
-			header( 'X-NBP-Last-Data: ' . substr( $json, 0, 900 ) );
+			header( 'X-WWHRY-NBP-Last-Data: ' . substr( $json, 0, 900 ) );
 		}
 
 		$full = wp_json_encode( self::$debug );
 		if ( is_string( $full ) ) {
-			header( 'X-NBP-Debug: ' . substr( $full, 0, 1400 ) );
+			header( 'X-WWHRY-NBP-Debug: ' . substr( $full, 0, 1400 ) );
 		}
 	}
 }

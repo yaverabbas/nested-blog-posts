@@ -45,7 +45,7 @@ Yes. WordPress will typically redirect old single-level URLs to the new hierarch
 It can if you use the exact same path for a Page or taxonomy route. The plugin will not override a published Page at the same full path, but you should avoid slug collisions.
 
 = How do I debug? =
-As an admin, add `?nbp_debug=1` to a nested URL and check the response headers in DevTools → Network.
+As an admin, add `?wwhry_nbp_debug=1` to a nested URL and check the response headers in DevTools → Network.
 
 == Changelog ==
 

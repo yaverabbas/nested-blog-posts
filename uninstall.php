@@ -7,5 +7,5 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-delete_option( 'nbp_enabled' );
-delete_option( 'nbp_needs_flush' );
+delete_option( 'wwhry_nbp_enabled' );
+delete_option( 'wwhry_nbp_needs_flush' );

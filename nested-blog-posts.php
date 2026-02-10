@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'NBP_VERSION', '1.0.0' );
-define( 'NBP_FILE', __FILE__ );
-define( 'NBP_DIR', plugin_dir_path( __FILE__ ) );
-define( 'NBP_URL', plugin_dir_url( __FILE__ ) );
+define( 'WWHRY_NBP_VERSION', '1.0.0' );
+define( 'WWHRY_NBP_FILE', __FILE__ );
+define( 'WWHRY_NBP_DIR', plugin_dir_path( __FILE__ ) );
+define( 'WWHRY_NBP_URL', plugin_dir_url( __FILE__ ) );
 
-require_once NBP_DIR . 'includes/class-nbp-plugin.php';
+require_once WWHRY_NBP_DIR . 'includes/class-nbp-plugin.php';
 
-add_action( 'plugins_loaded', array( 'NBP_Plugin', 'init' ) );
+add_action( 'plugins_loaded', array( 'WWHRY_NBP_Plugin', 'init' ) );
 
-register_activation_hook( __FILE__, array( 'NBP_Plugin', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'NBP_Plugin', 'deactivate' ) );
+register_activation_hook( __FILE__, array( 'WWHRY_NBP_Plugin', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'WWHRY_NBP_Plugin', 'deactivate' ) );

@@ -3,25 +3,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once NBP_DIR . 'includes/class-nbp-admin.php';
-require_once NBP_DIR . 'includes/class-nbp-router.php';
+require_once WWHRY_NBP_DIR . 'includes/class-nbp-admin.php';
+require_once WWHRY_NBP_DIR . 'includes/class-nbp-router.php';
 
 /**
  * Bootstrapper for Nested Blog Posts.
  *
  * @since 1.0.0
  */
-final class NBP_Plugin {
+final class WWHRY_NBP_Plugin {
 
 	/**
 	 * Option name for enabling/disabling the feature.
 	 */
-	const OPTION_ENABLED = 'nbp_enabled';
+	const OPTION_ENABLED = 'wwhry_nbp_enabled';
 
 	/**
 	 * Internal flag option to flush rewrite rules once.
 	 */
-	const OPTION_NEEDS_FLUSH = 'nbp_needs_flush';
+	const OPTION_NEEDS_FLUSH = 'wwhry_nbp_needs_flush';
 
 	/**
 	 * Initialize plugin.
@@ -29,6 +29,16 @@ final class NBP_Plugin {
 	 * @since 1.0.0
 	 */
 	public static function init() {
+		// One-time migration of old option names to new prefix (for pre-approval installs).
+		if ( get_option( 'nbp_enabled', null ) !== null ) {
+			update_option( self::OPTION_ENABLED, get_option( 'nbp_enabled', 1 ) );
+			delete_option( 'nbp_enabled' );
+		}
+		if ( get_option( 'nbp_needs_flush', null ) !== null ) {
+			update_option( self::OPTION_NEEDS_FLUSH, get_option( 'nbp_needs_flush', 0 ) );
+			delete_option( 'nbp_needs_flush' );
+		}
+
 		// Configure post type early (before init) for Block Editor compatibility.
 		add_action( 'registered_post_type', array( __CLASS__, 'configure_post_type_early' ), 10, 2 );
 		add_action( 'init', array( __CLASS__, 'configure_post_type' ), 0 );
@@ -38,7 +48,7 @@ final class NBP_Plugin {
 
 		// Admin UI
 		if ( is_admin() ) {
-			NBP_Admin::init();
+			WWHRY_NBP_Admin::init();
 			// Ensure post type is configured in admin area.
 			add_action( 'admin_init', array( __CLASS__, 'configure_post_type' ), 0 );
 		}
@@ -50,7 +60,7 @@ final class NBP_Plugin {
 		add_action( 'wp_loaded', array( __CLASS__, 'maybe_flush_rewrites' ), 20 );
 
 		// Plugin action links.
-		add_filter( 'plugin_action_links_' . plugin_basename( NBP_FILE ), array( __CLASS__, 'action_links' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( WWHRY_NBP_FILE ), array( __CLASS__, 'action_links' ) );
 	}
 
 	/**
@@ -167,7 +177,7 @@ final class NBP_Plugin {
 			return;
 		}
 
-		NBP_Router::init();
+		WWHRY_NBP_Router::init();
 	}
 
 	/**
